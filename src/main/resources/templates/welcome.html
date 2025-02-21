@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>생일 축하 메시지</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+        }
+        .message {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .background-photo {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        button {
+            background: linear-gradient(135deg, #ff7eb3, #ff758c);
+            color: white;
+            padding: 15px 30px;
+            font-size: 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 300px;
+            transition: transform 0.2s ease;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .video-grid {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 20;
+        }
+        .video-cell {
+            position: relative;
+            overflow: hidden;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 🎉 수정: 배경 없이 깨끗한 텍스트 */
+        .overlay-text {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6); /* 글자 가독성 향상 */
+            text-align: center;
+            z-index: 30;
+        }
+    </style>
+</head>
+<body>
+
+<div id="messageContainer" class="content-container">
+    <div class="message">🎉 선영아, 생일 축하해! 🎉</div>
+    <img src="/photo2.jpg" alt="Background Photo" class="background-photo">
+    <button onclick="startSequence()">🎵 음성 메시지 듣기 🎵</button>
+</div>
+
+<audio id="audio" src="/birthdayMessage.mp3"></audio>
+
+<!-- 🎉 수정: 배경 없는 "선영아, 생일 축하해!" 문구 -->
+<div id="overlayText" class="overlay-text">🎉 선영아, 생일 축하해! 🎉</div>
+
+<div class="video-grid" id="videoGrid">
+    <!-- 첫 번째 행 -->
+    <div class="video-cell"><video id="mainVideo" loop><source src="/Gun.mp4" type="video/mp4"></video></div>
+    <div class="video-cell"><video class="bg-video" loop muted><source src="/Gun.mp4" type="video/mp4"></video></div>
+    <div class="video-cell"><video class="bg-video" loop muted><source src="/Gun.mp4" type="video/mp4"></video></div>
+
+    <!-- 두 번째 행 -->
+    <div class="video-cell"><video class="bg-video" loop muted><source src="/Cat.mp4" type="video/mp4"></video></div>
+    <div class="video-cell"><video class="bg-video" loop muted><source src="/Cat.mp4" type="video/mp4"></video></div>
+    <div class="video-cell"><video class="bg-video" loop muted><source src="/Cat.mp4" type="video/mp4"></video></div>
+
+    <!-- 세 번째 행 -->
+    <div class="video-cell"><video class="bg-video" loop muted><source src="/pink.mp4" type="video/mp4"></video></div>
+    <div class="video-cell"><video class="bg-video" loop muted><source src="/pink.mp4" type="video/mp4"></video></div>
+    <div class="video-cell"><video class="bg-video" loop muted><source src="/pink.mp4" type="video/mp4"></video></div>
+</div>
+
+<script>
+    function startSequence() {
+        const audio = document.getElementById('audio');
+        const messageContainer = document.getElementById('messageContainer');
+        const videoGrid = document.getElementById('videoGrid');
+        const mainVideo = document.getElementById('mainVideo');
+        const videos = document.querySelectorAll('.bg-video');
+        const overlayText = document.getElementById('overlayText'); // 🎉 추가
+
+        // 음성 메시지 재생
+        audio.play();
+
+        // ✅ 이벤트 핸들러 추가: 음성 메시지가 끝나면 실행
+        audio.onended = function() {
+            console.log("음성 메시지 재생 완료. 영상으로 전환 중...");
+
+            // ✅ 메시지 화면 숨기기
+            messageContainer.style.display = 'none';
+
+            // ✅ 3x3 동영상 그리드 표시
+            videoGrid.style.display = 'grid';
+
+            // ✅ "선영아, 생일 축하해!" 텍스트 표시
+            overlayText.style.display = 'block';
+
+            // ✅ 첫 번째 영상 소리 켜기 및 재생
+            mainVideo.muted = false;
+            mainVideo.play();
+
+            // ✅ 나머지 모든 영상 재생 (음소거 상태 유지)
+            videos.forEach(video => {
+                video.play();
+            });
+        };
+    }
+</script>
+
+</body>
+</html>
